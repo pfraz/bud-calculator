@@ -5,24 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pharmacy BUD Dashboard</title>
     <style>
+        /* Extracted from Style Guide */
         :root {
-            --primary: #0056b3; /* Your blue color */
-            --background: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-dark: #212529;
-            --text-light: #6c757d;
-            /* --secondary is no longer used for the 1-year card */
+            --digital-purple: #B341FF;
+            --deep-purple: #390063;
+            --mint: #00DCA5;
+            --digital-text-gray: #53565A;
+            --digital-dark-gray: #76787B;
+            --light-gray: #E0E0DE;
+            --white: #FFFFFF;
+            --black: #000000;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            /* Using Arial as the approved system font */
+            font-family: Arial, Helvetica, sans-serif; 
             margin: 0;
             padding: 0;
-            background-color: var(--background);
-            color: var(--text-dark);
-            line-height: 1.6;
-            padding-bottom: 70px; /* Space for disclaimer */
+            background-color: var(--white);
+            color: var(--digital-text-gray);
+            box-sizing: border-box;
+            line-height: 1.5;
+            padding-bottom: 80px; 
         }
+
+        *, *:before, *:after { box-sizing: inherit; }
 
         .container {
             max-width: 800px;
@@ -30,76 +37,149 @@
             padding: 20px;
         }
 
-        /* Today's Date Header */
-        .header-card {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 25px 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .header-card h1 {
-            margin: 0;
-            font-size: 1.2rem;
+        /* --- EXPRESSIVE TYPOGRAPHY (Mimicking Sharp Grotesk Bold Rules) --- */
+        .expressive-header {
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
+            font-size: 19px; /* Specifically called out in guide */
+            color: var(--black);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
 
-        .header-card .today-date {
-            font-size: 2.5rem;
-            font-weight: 900;
-            margin-top: 5px;
+        .header-container {
+            border-bottom: 2px solid var(--digital-purple);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
-        /* Dashboard Grid */
+        .today-date {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--digital-purple);
+        }
+
+        /* --- FUNCTIONAL SUBHEADS (Mimicking Benton Sans Medium) --- */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--digital-text-gray);
+            margin: 30px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        /* --- WHITEBOARD DASHBOARD GRID --- */
         .dates-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
         }
 
-        /* Individual Date Cards */
         .date-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            border-left: 5px solid var(--digital-purple);
+            border-radius: 4px;
+            padding: 12px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            /* This line makes all cards use the blue border */
-            border-left: 6px solid var(--primary);
         }
-
-        /* FIX: The entire CSS block for '.date-card.year-card' has been removed.
-           This means the 1-year card will no longer have a special pink border.
-        */
 
         .date-card .interval-label {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            color: var(--digital-dark-gray);
+            margin-bottom: 5px;
         }
 
         .date-card .calculated-date {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--black);
         }
 
+        /* --- DYNAMIC RESULT DISPLAY (Mint on Deep Purple) --- */
+        #resultDisplay {
+            background-color: var(--deep-purple);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none; /* Hidden until a button is clicked */
+        }
+
+        #resultDisplay.active {
+            display: block;
+        }
+
+        #resultDisplay .label { 
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-gray);
+        }
+        
+        #resultDisplay .drug-name { 
+            font-weight: bold; 
+            display: block; 
+            margin: 10px 0; 
+            font-size: 22px;
+        }
+        
+        #resultDisplay .bud-date { 
+            font-size: 32px; 
+            font-weight: bold; 
+            color: var(--mint); /* Approved contrast rule */
+            display: block; 
+            margin: 10px 0;
+        }
+        
+        #resultDisplay .calc-details { 
+            font-size: 14px; 
+            color: var(--light-gray); 
+        }
+
+        /* --- DIGITAL PURPLE BUTTONS --- */
+        .drug-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .drug-button {
+            height: 55px;
+            background-color: var(--digital-purple);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 8px;
+            -webkit-appearance: none;
+        }
+
+        .drug-button:active {
+            background-color: var(--deep-purple);
+        }
+
+        /* --- DISCLAIMER --- */
         footer.disclaimer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #343a40;
-            color: white;
+            background-color: var(--digital-dark-gray);
+            color: var(--white);
             padding: 12px;
-            font-size: 0.85rem;
+            font-size: 12px;
             text-align: center;
             z-index: 100;
         }
@@ -108,13 +188,28 @@
 <body>
 
     <div class="container">
-        <div class="header-card">
-            <h1>Today is</h1>
+        
+        <div class="header-container">
+            <div class="expressive-header">Today Is</div>
             <div class="today-date" id="displayToday">Loading...</div>
         </div>
 
+        <div class="section-title">Standard Short Dates</div>
         <div class="dates-grid" id="datesContainer">
             </div>
+
+        <div class="section-title">Medication Calculator</div>
+        
+        <div id="resultDisplay">
+            <span class="label">Write this date on sticker:</span>
+            <span class="drug-name" id="resultDrugName"></span>
+            <span class="bud-date" id="resultBudDate"></span>
+            <span class="calc-details" id="resultCalcDetails"></span>
+        </div>
+
+        <div class="drug-grid" id="drugButtonsContainer">
+            </div>
+
     </div>
 
     <footer class="disclaimer">
@@ -122,7 +217,10 @@
     </footer>
 
     <script>
-        // The intervals you want to display (in days, plus the 1 year special case)
+        const today = new Date();
+        const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+
+        // --- 1. Dashboard Logic ---
         const dateIntervals = [
             { label: "14 Days", value: 14, unit: "days" },
             { label: "21 Days", value: 21, unit: "days" },
@@ -134,20 +232,13 @@
         ];
 
         function initializeDashboard() {
-            const today = new Date();
-            
-            // Format and display today's date in the header
-            const todayOptions = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+            const todayOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
             document.getElementById('displayToday').textContent = today.toLocaleDateString('en-US', todayOptions).toUpperCase();
 
             const container = document.getElementById('datesContainer');
-            const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-
-            // Calculate and create a card for each interval
+            
             dateIntervals.forEach(interval => {
-                // Create a fresh date object for each calculation so we don't accidentally modify 'today'
                 const budDate = new Date(today.getTime()); 
-
                 if (interval.unit === "days") {
                     budDate.setDate(today.getDate() + interval.value);
                 } else if (interval.unit === "year") {
@@ -156,23 +247,77 @@
 
                 const dateString = budDate.toLocaleDateString('en-US', stickerFormatOptions).toUpperCase();
                 
-                // Create the HTML for the card
                 const card = document.createElement('div');
-                // FIX: Removed the conditional logic that added the 'year-card' class.
-                // Now all cards get the same basic 'date-card' class.
                 card.className = 'date-card'; 
-                
                 card.innerHTML = `
                     <div class="interval-label">+ ${interval.label}</div>
                     <div class="calculated-date">${dateString}</div>
                 `;
-                
                 container.appendChild(card);
             });
         }
 
-        // Run when the page loads
+        // --- 2. Medication Button Logic ---
+        const shortDatedDrugsData = [
+            { name: "Cisatracurium (vials)", stabilityValue: 21, stabilityUnit: "days" },
+            { name: "Diltiazem (vials)", stabilityValue: 30, stabilityUnit: "days" },
+            { name: "Famotidine", stabilityValue: 90, stabilityUnit: "days" },
+            { name: "Humulin Regular", stabilityValue: 28, stabilityUnit: "days" },
+            { name: "Insulin Lispro", stabilityValue: 28, stabilityUnit: "days" },
+            { name: "Methylergonovine", stabilityValue: 14, stabilityUnit: "days" },
+            { name: "Rocuronium (vials)", stabilityValue: 60, stabilityUnit: "days" },
+            { name: "Succinylcholine (vials)", stabilityValue: 14, stabilityUnit: "days" },
+            { name: "Vasopressin (vials)", stabilityValue: 1, stabilityUnit: "year" }
+        ];
+
+        function calculateAndDisplayBUD(drugIndex) {
+            const drug = shortDatedDrugsData[drugIndex];
+            if (!drug) return;
+
+            const budDate = new Date();
+            if (drug.stabilityUnit === "days") {
+                budDate.setDate(today.getDate() + drug.stabilityValue);
+            } else if (drug.stabilityUnit === "year") {
+                budDate.setFullYear(today.getFullYear() + drug.stabilityValue);
+            }
+
+            const budStickerString = budDate.toLocaleDateString('en-US', stickerFormatOptions).toUpperCase();
+            const calcTodayStr = today.toLocaleDateString('en-US');
+
+            // Update DOM
+            document.getElementById('resultDrugName').textContent = drug.name;
+            document.getElementById('resultBudDate').textContent = budStickerString;
+            document.getElementById('resultCalcDetails').textContent = `(${calcTodayStr} + ${drug.stabilityValue} ${drug.stabilityUnit})`;
+            
+            // Show the display box
+            document.getElementById('resultDisplay').classList.add('active');
+        }
+
+        function initializeButtons() {
+            const container = document.getElementById('drugButtonsContainer');
+            shortDatedDrugsData.forEach((drug, index) => {
+                const button = document.createElement('button');
+                button.className = 'drug-button';
+                // Remove parens for a cleaner button look
+                button.textContent = drug.name.replace(/\(.*?\)/, '').trim(); 
+
+                button.addEventListener('click', () => {
+                    calculateAndDisplayBUD(index);
+                    // Scroll to the result box slightly above center
+                    const yOffset = -80; 
+                    const element = document.getElementById('resultDisplay');
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                });
+
+                container.appendChild(button);
+            });
+        }
+
+        // --- Run App ---
         initializeDashboard();
+        initializeButtons();
+
     </script>
 </body>
 </html>
