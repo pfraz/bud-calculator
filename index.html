@@ -6,8 +6,8 @@
     <title>Pharmacy BUD Calculator</title>
     <style>
         :root {
-            --primary: #007bff; /* Blue */
-            --secondary: #e83e8c; /* Pink, matching your sign */
+            --primary: #007bff;
+            --secondary: #e83e8c;
             --light: #f8f9fa;
             --dark: #343a40;
             --text-on-dark: #ffffff;
@@ -28,15 +28,13 @@
             box-sizing: inherit;
         }
 
-        /* Container for all content */
         .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 80px; /* Space for disclaimer footer */
+            padding-bottom: 80px;
         }
 
-        /* Title Area */
         header {
             text-align: center;
             padding: 10px 0 20px 0;
@@ -59,9 +57,8 @@
             color: #555;
         }
 
-        /* The main calculation display */
         #resultDisplay {
-            background-color: #e3f2fd; /* Light blue info box */
+            background-color: #e3f2fd;
             color: #0d47a1;
             padding: 15px;
             border-radius: 8px;
@@ -77,8 +74,6 @@
         #resultDisplay .calc-details { font-size: 0.9em; color: #666; font-style: italic; display: block; }
         #resultDisplay .note { font-size: 0.9em; color: var(--dark); background: #fefbd8; display: inline-block; padding: 2px 6px; border-radius: 4px; margin-top: 5px; }
 
-
-        /* Grouping buttons */
         .section-title {
             font-size: 1em;
             text-transform: uppercase;
@@ -89,14 +84,12 @@
             padding-bottom: 5px;
         }
 
-        /* Button Grid for drug selection */
         .drug-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 10px;
         }
 
-        /* The buttons themselves */
         .drug-button {
             height: var(--button-height);
             background-color: var(--primary);
@@ -112,7 +105,7 @@
             align-items: center;
             justify-content: center;
             padding: 5px;
-            -webkit-appearance: none; /* Mobile Safari fix */
+            -webkit-appearance: none;
         }
 
         .drug-button:active {
@@ -120,7 +113,6 @@
             background-color: #0056b3;
         }
 
-        /* Color variance matching sign */
         .drug-button.pink {
             background-color: var(--secondary);
         }
@@ -128,7 +120,6 @@
             background-color: #b52a6a;
         }
 
-        /* Disclaimer footer fixed to bottom */
         footer.disclaimer {
             position: fixed;
             bottom: 0;
@@ -164,13 +155,10 @@
     </div>
 
     <footer class="disclaimer">
-        ⚠️ <strong>CRITICAL DISCLAIMER:</strong> This is a decision support tool only. You <u>must</u> confirm all values from image_0.png with your licensed pharmacist before use. Data is based on provided photo image_0.png. It does not replace independent pharmacist verification.
+        ⚠️ <strong>CRITICAL DISCLAIMER:</strong> This is a decision support tool only. You <u>must</u> confirm all values with your licensed pharmacist before use. It does not replace independent pharmacist verification.
     </footer>
 
     <script>
-        // --- DATA OBJECT (Confirmed from image_0.png) ---
-        // Verify every value here before using in the pharmacy.
-        // Special case handling for 'year' (Vasopressin).
         const shortDatedDrugsData = [
             { name: "Cisatracurium (vials)", stabilityValue: 21, stabilityUnit: "days", type: "blue" },
             { name: "Diltiazem (vials)", stabilityValue: 30, stabilityUnit: "days", type: "pink" },
@@ -183,35 +171,24 @@
             { name: "Vasopressin (vials)", stabilityValue: 1, stabilityUnit: "year", type: "pink", note: "@ room temp" }
         ];
 
-        // Global today's date
         const today = new Date();
 
-        // --- Core Calculation Logic ---
         function calculateAndDisplayBUD(drugIndex) {
             const drug = shortDatedDrugsData[drugIndex];
             if (!drug) return;
 
-            // Perform Date Math
-            const budDate = new Date(); // Start with a copy of today
+            const budDate = new Date();
 
             if (drug.stabilityUnit === "days") {
-                // For days, add them to the date of month
                 budDate.setDate(today.getDate() + drug.stabilityValue);
             } else if (drug.stabilityUnit === "year") {
-                // For years, add them to the full year value
                 budDate.setFullYear(today.getFullYear() + drug.stabilityValue);
             }
 
-            // --- Format Dates for Display ---
-            // Format 1: A very prominent date (e.g., "MAY 25 2025") for the sticker.
-            // Using a structured format is clearer.
             const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
             const budStickerString = budDate.toLocaleDateString('en-US', stickerFormatOptions).toUpperCase();
-
-            // Format 2: Details showing the date math
             const calcTodayStr = today.toLocaleDateString('en-US');
 
-            // --- Render the output ---
             const resultDisplay = document.getElementById('resultDisplay');
             resultDisplay.innerHTML = `
                 <span class="label">WRITE THIS DATE ON STICKER:</span>
@@ -222,24 +199,19 @@
             `;
         }
 
-        // --- UI Setup Logic ---
         function initializeApp() {
-            // 1. Update the Header Date
             const todaysDateHeader = document.getElementById('todaysDateHeader');
             const headerDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             todaysDateHeader.textContent = `Today is: ${today.toLocaleDateString('en-US', headerDateOptions)}`;
 
-            // 2. Generate the Buttons
             const container = document.getElementById('drugButtonsContainer');
             shortDatedDrugsData.forEach((drug, index) => {
                 const button = document.createElement('button');
                 button.className = `drug-button ${drug.type}`;
-                button.textContent = drug.name.replace(/\(.*?\)/, '').trim(); // Display cleaner name (remove parens)
+                button.textContent = drug.name.replace(/\(.*?\)/, '').trim(); 
 
-                // Add click handler
                 button.addEventListener('click', () => {
                     calculateAndDisplayBUD(index);
-                    // Mobile Scroll up optimization:
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
 
@@ -247,7 +219,6 @@
             });
         }
 
-        // Run the app startup
         initializeApp();
 
     </script>
