@@ -6,12 +6,12 @@
     <title>Pharmacy BUD Dashboard</title>
     <style>
         :root {
-            --primary: #0056b3;
-            --secondary: #e83e8c;
+            --primary: #0056b3; /* Your blue color */
             --background: #f4f7f6;
             --card-bg: #ffffff;
             --text-dark: #212529;
             --text-light: #6c757d;
+            /* --secondary is no longer used for the 1-year card */
         }
 
         body {
@@ -69,13 +69,13 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            /* This line makes all cards use the blue border */
             border-left: 6px solid var(--primary);
         }
 
-        /* Make the 1-year card a different color to stand out */
-        .date-card.year-card {
-            border-left-color: var(--secondary);
-        }
+        /* FIX: The entire CSS block for '.date-card.year-card' has been removed.
+           This means the 1-year card will no longer have a special pink border.
+        */
 
         .date-card .interval-label {
             font-size: 1.1rem;
@@ -158,7 +158,9 @@
                 
                 // Create the HTML for the card
                 const card = document.createElement('div');
-                card.className = interval.unit === "year" ? 'date-card year-card' : 'date-card';
+                // FIX: Removed the conditional logic that added the 'year-card' class.
+                // Now all cards get the same basic 'date-card' class.
+                card.className = 'date-card'; 
                 
                 card.innerHTML = `
                     <div class="interval-label">+ ${interval.label}</div>
@@ -171,231 +173,6 @@
 
         // Run when the page loads
         initializeDashboard();
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pharmacy BUD Calculator</title>
-    <style>
-        :root {
-            --primary: #007bff;
-            --secondary: #e83e8c;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --text-on-dark: #ffffff;
-            --button-height: 50px;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light);
-            color: var(--dark);
-            box-sizing: border-box;
-            line-height: 1.5;
-        }
-
-        *, *:before, *:after {
-            box-sizing: inherit;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            padding-bottom: 80px;
-        }
-
-        header {
-            text-align: center;
-            padding: 10px 0 20px 0;
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: 20px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--primary);
-        }
-
-        header .current-date {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 5px;
-            color: #555;
-        }
-
-        #resultDisplay {
-            background-color: #e3f2fd;
-            color: #0d47a1;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        #resultDisplay .label { font-weight: bold; }
-        #resultDisplay .drug-name { font-weight: bold; display: block; margin: 10px 0; font-size: 1.3em;}
-        #resultDisplay .bud-date { font-size: 2em; font-weight: 900; color: var(--secondary); display: block; margin: 10px 0;}
-        #resultDisplay .calc-details { font-size: 0.9em; color: #666; font-style: italic; display: block; }
-        #resultDisplay .note { font-size: 0.9em; color: var(--dark); background: #fefbd8; display: inline-block; padding: 2px 6px; border-radius: 4px; margin-top: 5px; }
-
-        .section-title {
-            font-size: 1em;
-            text-transform: uppercase;
-            color: #777;
-            margin-bottom: 10px;
-            margin-top: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-        }
-
-        .drug-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 10px;
-        }
-
-        .drug-button {
-            height: var(--button-height);
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            -webkit-appearance: none;
-        }
-
-        .drug-button:active {
-            transform: scale(0.97);
-            background-color: #0056b3;
-        }
-
-        .drug-button.pink {
-            background-color: var(--secondary);
-        }
-        .drug-button.pink:active {
-            background-color: #b52a6a;
-        }
-
-        footer.disclaimer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--dark);
-            color: var(--text-on-dark);
-            padding: 10px;
-            font-size: 0.8em;
-            text-align: center;
-            border-top: 2px solid var(--secondary);
-            z-index: 100;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Short Dated Drugs</h1>
-            <div class="current-date" id="todaysDateHeader">Current Date: [Loading...]</div>
-        </header>
-
-        <div id="resultDisplay">
-            <span class="label">Step 1:</span>
-            <span class="instruction"> Select a medication from the list below to calculate its Beyond Use Date.</span>
-        </div>
-
-        <div class="section-title">Common Medications</div>
-        <div class="drug-grid" id="drugButtonsContainer">
-            </div>
-
-    </div>
-
-    <footer class="disclaimer">
-        ⚠️ <strong>CRITICAL DISCLAIMER:</strong> This is a decision support tool only. You <u>must</u> confirm all values with your licensed pharmacist before use. It does not replace independent pharmacist verification.
-    </footer>
-
-    <script>
-        const shortDatedDrugsData = [
-            { name: "Cisatracurium (vials)", stabilityValue: 21, stabilityUnit: "days", type: "blue" },
-            { name: "Diltiazem (vials)", stabilityValue: 30, stabilityUnit: "days", type: "pink" },
-            { name: "Famotidine", stabilityValue: 90, stabilityUnit: "days", type: "blue" },
-            { name: "Humulin Regular (vials)", stabilityValue: 28, stabilityUnit: "days", type: "blue" },
-            { name: "Insulin Lispro (vials)", stabilityValue: 28, stabilityUnit: "days", type: "pink" },
-            { name: "Methylergonovine (inj)", stabilityValue: 14, stabilityUnit: "days", type: "blue" },
-            { name: "Rocuronium (vials)", stabilityValue: 60, stabilityUnit: "days", type: "pink" },
-            { name: "Succinylcholine (vials)", stabilityValue: 14, stabilityUnit: "days", type: "blue" },
-            { name: "Vasopressin (vials)", stabilityValue: 1, stabilityUnit: "year", type: "pink", note: "@ room temp" }
-        ];
-
-        const today = new Date();
-
-        function calculateAndDisplayBUD(drugIndex) {
-            const drug = shortDatedDrugsData[drugIndex];
-            if (!drug) return;
-
-            const budDate = new Date();
-
-            if (drug.stabilityUnit === "days") {
-                budDate.setDate(today.getDate() + drug.stabilityValue);
-            } else if (drug.stabilityUnit === "year") {
-                budDate.setFullYear(today.getFullYear() + drug.stabilityValue);
-            }
-
-            const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-            const budStickerString = budDate.toLocaleDateString('en-US', stickerFormatOptions).toUpperCase();
-            const calcTodayStr = today.toLocaleDateString('en-US');
-
-            const resultDisplay = document.getElementById('resultDisplay');
-            resultDisplay.innerHTML = `
-                <span class="label">WRITE THIS DATE ON STICKER:</span>
-                <span class="drug-name">${drug.name}</span>
-                <span class="bud-date">${budStickerString}</span>
-                <span class="calc-details">(${calcTodayStr} + ${drug.stabilityValue} ${drug.stabilityUnit})</span>
-                ${drug.note ? `<br><span class="note">${drug.note}</span>` : ''}
-            `;
-        }
-
-        function initializeApp() {
-            const todaysDateHeader = document.getElementById('todaysDateHeader');
-            const headerDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            todaysDateHeader.textContent = `Today is: ${today.toLocaleDateString('en-US', headerDateOptions)}`;
-
-            const container = document.getElementById('drugButtonsContainer');
-            shortDatedDrugsData.forEach((drug, index) => {
-                const button = document.createElement('button');
-                button.className = `drug-button ${drug.type}`;
-                button.textContent = drug.name.replace(/\(.*?\)/, '').trim(); 
-
-                button.addEventListener('click', () => {
-                    calculateAndDisplayBUD(index);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-
-                container.appendChild(button);
-            });
-        }
-
-        initializeApp();
-
     </script>
 </body>
 </html>
