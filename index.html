@@ -18,7 +18,6 @@
         }
 
         body {
-            /* Using Arial as the approved system font */
             font-family: Arial, Helvetica, sans-serif; 
             margin: 0;
             padding: 0;
@@ -37,11 +36,11 @@
             padding: 20px;
         }
 
-        /* --- EXPRESSIVE TYPOGRAPHY (Mimicking Sharp Grotesk Bold Rules) --- */
+        /* --- EXPRESSIVE TYPOGRAPHY --- */
         .expressive-header {
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 19px; /* Specifically called out in guide */
+            font-size: 19px; 
             color: var(--black);
             margin-bottom: 5px;
             letter-spacing: 0.5px;
@@ -59,7 +58,7 @@
             color: var(--digital-purple);
         }
 
-        /* --- FUNCTIONAL SUBHEADS (Mimicking Benton Sans Medium) --- */
+        /* --- FUNCTIONAL SUBHEADS --- */
         .section-title {
             font-size: 16px;
             font-weight: bold;
@@ -100,7 +99,7 @@
             color: var(--black);
         }
 
-        /* --- DYNAMIC RESULT DISPLAY (Mint on Deep Purple) --- */
+        /* --- DYNAMIC RESULT DISPLAY --- */
         #resultDisplay {
             background-color: var(--deep-purple);
             color: var(--white);
@@ -109,7 +108,7 @@
             margin-bottom: 25px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: none; /* Hidden until a button is clicked */
+            display: none; 
         }
 
         #resultDisplay.active {
@@ -133,7 +132,7 @@
         #resultDisplay .bud-date { 
             font-size: 32px; 
             font-weight: bold; 
-            color: var(--mint); /* Approved contrast rule */
+            color: var(--mint); 
             display: block; 
             margin: 10px 0;
         }
@@ -151,7 +150,7 @@
         }
 
         .drug-button {
-            height: 55px;
+            height: 65px; /* Slightly taller to accommodate the longer bag name */
             background-color: var(--digital-purple);
             color: var(--white);
             border: none;
@@ -220,8 +219,9 @@
         const today = new Date();
         const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
 
-        // --- 1. Dashboard Logic ---
+        // --- 1. Dashboard Logic (Added 7 Days) ---
         const dateIntervals = [
+            { label: "7 Days", value: 7, unit: "days" },
             { label: "14 Days", value: 14, unit: "days" },
             { label: "21 Days", value: 21, unit: "days" },
             { label: "28 Days", value: 28, unit: "days" },
@@ -241,6 +241,8 @@
                 const budDate = new Date(today.getTime()); 
                 if (interval.unit === "days") {
                     budDate.setDate(today.getDate() + interval.value);
+                } else if (interval.unit === "months") {
+                    budDate.setMonth(today.getMonth() + interval.value);
                 } else if (interval.unit === "year") {
                     budDate.setFullYear(today.getFullYear() + interval.value);
                 }
@@ -257,7 +259,7 @@
             });
         }
 
-        // --- 2. Medication Button Logic ---
+        // --- 2. Medication Button Logic (Added Vasopressin Bag & Month logic) ---
         const shortDatedDrugsData = [
             { name: "Cisatracurium (vials)", stabilityValue: 21, stabilityUnit: "days" },
             { name: "Diltiazem (vials)", stabilityValue: 30, stabilityUnit: "days" },
@@ -267,6 +269,7 @@
             { name: "Methylergonovine", stabilityValue: 14, stabilityUnit: "days" },
             { name: "Rocuronium (vials)", stabilityValue: 60, stabilityUnit: "days" },
             { name: "Succinylcholine (vials)", stabilityValue: 14, stabilityUnit: "days" },
+            { name: "Vasopressin 20u/100mL NS bag", stabilityValue: 6, stabilityUnit: "months" },
             { name: "Vasopressin (vials)", stabilityValue: 1, stabilityUnit: "year" }
         ];
 
@@ -275,8 +278,12 @@
             if (!drug) return;
 
             const budDate = new Date();
+            
+            // New logic to handle months alongside days and years
             if (drug.stabilityUnit === "days") {
                 budDate.setDate(today.getDate() + drug.stabilityValue);
+            } else if (drug.stabilityUnit === "months") {
+                budDate.setMonth(today.getMonth() + drug.stabilityValue);
             } else if (drug.stabilityUnit === "year") {
                 budDate.setFullYear(today.getFullYear() + drug.stabilityValue);
             }
@@ -298,7 +305,7 @@
             shortDatedDrugsData.forEach((drug, index) => {
                 const button = document.createElement('button');
                 button.className = 'drug-button';
-                // Remove parens for a cleaner button look
+                // Remove parens for a cleaner button look, but keep the core name
                 button.textContent = drug.name.replace(/\(.*?\)/, '').trim(); 
 
                 button.addEventListener('click', () => {
