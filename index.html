@@ -150,7 +150,7 @@
         }
 
         .drug-button {
-            height: 65px; /* Slightly taller to accommodate the longer bag name */
+            height: 65px; 
             background-color: var(--digital-purple);
             color: var(--white);
             border: none;
@@ -188,15 +188,19 @@
 
     <div class="container">
         
+        <!-- Header -->
         <div class="header-container">
             <div class="expressive-header">Today Is</div>
             <div class="today-date" id="displayToday">Loading...</div>
         </div>
 
+        <!-- 1. Whiteboard Dashboard Section -->
         <div class="section-title">Standard Short Dates</div>
         <div class="dates-grid" id="datesContainer">
-            </div>
+            <!-- Cards injected via JavaScript -->
+        </div>
 
+        <!-- 2. Specific Medication Section -->
         <div class="section-title">Medication Calculator</div>
         
         <div id="resultDisplay">
@@ -207,7 +211,8 @@
         </div>
 
         <div class="drug-grid" id="drugButtonsContainer">
-            </div>
+            <!-- Buttons injected via JavaScript -->
+        </div>
 
     </div>
 
@@ -219,7 +224,7 @@
         const today = new Date();
         const stickerFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
 
-        // --- 1. Dashboard Logic (Added 7 Days) ---
+        // --- 1. Dashboard Logic ---
         const dateIntervals = [
             { label: "7 Days", value: 7, unit: "days" },
             { label: "14 Days", value: 14, unit: "days" },
@@ -259,7 +264,7 @@
             });
         }
 
-        // --- 2. Medication Button Logic (Added Vasopressin Bag & Month logic) ---
+        // --- 2. Medication Button Logic ---
         const shortDatedDrugsData = [
             { name: "Cisatracurium (vials)", stabilityValue: 21, stabilityUnit: "days" },
             { name: "Diltiazem (vials)", stabilityValue: 30, stabilityUnit: "days" },
@@ -270,7 +275,7 @@
             { name: "Rocuronium (vials)", stabilityValue: 60, stabilityUnit: "days" },
             { name: "Succinylcholine (vials)", stabilityValue: 14, stabilityUnit: "days" },
             { name: "Vasopressin 20u/100mL NS bag", stabilityValue: 6, stabilityUnit: "months" },
-            { name: "Vasopressin (vials)", stabilityValue: 1, stabilityUnit: "year" }
+            { name: "Vasopressin 100mL Vial", stabilityValue: 3, stabilityUnit: "months" }
         ];
 
         function calculateAndDisplayBUD(drugIndex) {
@@ -279,7 +284,6 @@
 
             const budDate = new Date();
             
-            // New logic to handle months alongside days and years
             if (drug.stabilityUnit === "days") {
                 budDate.setDate(today.getDate() + drug.stabilityValue);
             } else if (drug.stabilityUnit === "months") {
