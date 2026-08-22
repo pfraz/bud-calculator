@@ -150,7 +150,8 @@
         }
 
         .drug-button {
-            height: 65px; 
+            min-height: 65px; 
+            height: auto;
             background-color: var(--digital-purple);
             color: var(--white);
             border: none;
@@ -163,6 +164,9 @@
             transition: background-color 0.2s;
             padding: 8px;
             -webkit-appearance: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .drug-button:active {
@@ -230,9 +234,12 @@
             { label: "14 Days", value: 14, unit: "days" },
             { label: "21 Days", value: 21, unit: "days" },
             { label: "28 Days", value: 28, unit: "days" },
+            { label: "1 Month", value: 1, unit: "months" },
             { label: "30 Days", value: 30, unit: "days" },
+            { label: "6 Weeks", value: 6, unit: "weeks" },
             { label: "60 Days", value: 60, unit: "days" },
             { label: "90 Days", value: 90, unit: "days" },
+            { label: "6 Months", value: 6, unit: "months" },
             { label: "1 Year", value: 1, unit: "year" }
         ];
 
@@ -246,6 +253,8 @@
                 const budDate = new Date(today.getTime()); 
                 if (interval.unit === "days") {
                     budDate.setDate(today.getDate() + interval.value);
+                } else if (interval.unit === "weeks") {
+                    budDate.setDate(today.getDate() + (interval.value * 7));
                 } else if (interval.unit === "months") {
                     budDate.setMonth(today.getMonth() + interval.value);
                 } else if (interval.unit === "year") {
@@ -271,6 +280,7 @@
             { name: "Famotidine", stabilityValue: 90, stabilityUnit: "days" },
             { name: "Humulin Regular", stabilityValue: 28, stabilityUnit: "days" },
             { name: "Insulin Lispro", stabilityValue: 28, stabilityUnit: "days" },
+            { name: "Latanoprost", stabilityValue: 6, stabilityUnit: "weeks" },
             { name: "Methylergonovine", stabilityValue: 14, stabilityUnit: "days" },
             { name: "Rocuronium (vials)", stabilityValue: 60, stabilityUnit: "days" },
             { name: "Succinylcholine (vials)", stabilityValue: 14, stabilityUnit: "days" },
@@ -284,8 +294,11 @@
 
             const budDate = new Date();
             
+            // Logic to handle days, weeks, months, and years
             if (drug.stabilityUnit === "days") {
                 budDate.setDate(today.getDate() + drug.stabilityValue);
+            } else if (drug.stabilityUnit === "weeks") {
+                budDate.setDate(today.getDate() + (drug.stabilityValue * 7));
             } else if (drug.stabilityUnit === "months") {
                 budDate.setMonth(today.getMonth() + drug.stabilityValue);
             } else if (drug.stabilityUnit === "year") {
@@ -330,5 +343,6 @@
         initializeButtons();
 
     </script>
+   
 </body>
 </html>
